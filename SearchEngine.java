@@ -1,24 +1,36 @@
+import java.util.Arrays;
 class Handler implements URLHandler {
     // The one bit of state on the server: a number that will be manipulated by
     // various requests.
     int num = 0;
 
     public String handleRequest(URI url) {
-        if (url.getPath().equals("/")) {
-            return String.format("Number: %d", num);
-        } else if (url.getPath().equals("/increment")) {
-            num += 1;
-            return String.format("Number incremented!");
-        } else {
-            System.out.println("Path: " + url.getPath());
-            if (url.getPath().contains("/add")) {
-                String[] parameters = url.getQuery().split("=");
-                if (parameters[0].equals("count")) {
-                    num += Integer.parseInt(parameters[1]);
-                    return String.format("Number increased by %s! It's now %d", parameters[1], num);
+        ArrayList<String> strs = new ArrayList<>();
+        ArrayList<String> newarr = new ArrayList<>();
+        String[] parameters = url.getQuery().split("=");
+        if (url.getPath().contains("/add")) {
+            if (parameters[0].equals("s") & !strs.contains(parameters[1])) {
+                newarr = new String[strs.length + 1];
+                for (int i=0; i<strs.length; i++) {
+                    newarr[i] = strs[i]; 
                 }
+                newarr[strs.length] = parameters[1];
+                strs = newarr;
             }
-            return "404 Not Found!";
+            return null;
+        } else {   
+            if (url.getPath().equals("/search")) {
+                String target = "";
+                String newtarget = "";
+                for (String str: strs) {
+                    if (str.contains(parameters[1])) {
+                        newtarget = target + " and " + str;
+                        target = newtarget;
+                    }
+                }
+                return target;
+            }
+            return null;
         }
     }
 }

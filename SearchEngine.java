@@ -5,11 +5,11 @@ class Handler implements URLHandler {
     int num = 0;
 
     public String handleRequest(URI url) {
-        ArrayList<String> strs = new ArrayList<>();
-        ArrayList<String> newarr = new ArrayList<>();
+        String[] strs = {};
+        String[] newarr = {};
         String[] parameters = url.getQuery().split("=");
         if (url.getPath().contains("/add")) {
-            if (parameters[0].equals("s") & !strs.contains(parameters[1])) {
+            if (parameters[0].equals("s") & strs.indexOf(parameters[1]) != -1) {
                 newarr = new String[strs.length + 1];
                 for (int i=0; i<strs.length; i++) {
                     newarr[i] = strs[i]; 
